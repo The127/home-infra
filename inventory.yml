@@ -2,15 +2,25 @@
 all:
   vars:
     ansible_user: root
+    ansible_python_interpreter: /usr/bin/python
     
+
+ungrouped:
+  hosts:
+    k3s-master:
+    k3s-node1:
+    k3s-node2:
+
 db:
   hosts:
     k3s-master:
-      remote_user:
+
 master:
   hosts:
     k3s-master:
+
 node:
   hosts:
     k3s-node1:
     k3s-node2:
+

@@ -22,20 +22,24 @@
     opts: "defaults,noatime"
     state: present
 
-- name: Ensure /etc/fstab contains commit option for root filesystem
-  lineinfile:
-    path: /etc/fstab
-    regexp: '^(.*\s+/\s+ext4\s+defaults,noatime)(.*)$'
-    line: '\1,commit=600\2'
-    backrefs: yes
-    backup: yes
+- name: "root filesystem mount"
+  ansible.posix.mount:
+    src: /dev/mmcblk0p2
+    path: /
+    fstype: ext4
+    opts: "rw,noatime,commit=600"
     state: present
 
-- name: Remove duplicate commit options from /etc/fstab
-  shell: sed -i -E 's/(commit=[0-9]+)(,commit=[0-9]+)+/\1/g' /etc/fstab
+- name: "boot filesystem mount"
+  ansible.posix.mount:
+    src: /dev/mmcblk0p1
+    path: /boot/firmware
+    fstype: vfat
+    opts: "rw,noatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,errors=remount-ro"
+    state: present
 
 - name: rpi-update
   shell: yes | rpi-update
 
-- name: reboot
-  reboot:
+#- name: reboot
+#  reboot:
