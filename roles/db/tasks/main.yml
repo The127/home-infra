@@ -1,0 +1,37 @@
+---
+# file: roles/db/tasks/install_postgres.yml
+
+- name: add postgresql repository
+  copy:
+    dest: /etc/yum.repos.d/pgdg.repo
+    src: files/pgdg.repo
+  
+- name: install psycopg2
+  pip:
+    name: psycopg2-binary
+
+- name: check if database is initialized
+  stat:
+    path: /etc/flags/pg-intialized
+  register: pg_initialized_result
+
+- name: ensure database is initialized
+  command: /usr/pgsql-12/bin/postgresql-12-setup initdb
+  when: not pg_initialized_result.stat.exists
+  ignore_errors: yes
+
+- name: set database initialized flag
+  copy:
+    content: ""
+    dest: /etc/flags/pg-intialized
+    force: no
+    group: sys
+    owner: root
+    mode: 0555
+  when: not pg_initialized_result.stat.exists
+
+- name: enable autostart for database server
+  systemd:
+    state: started
+    enabled: yes
+    name: postgresql-12

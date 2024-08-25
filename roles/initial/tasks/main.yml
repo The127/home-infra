@@ -1,0 +1,41 @@
+---
+
+- name: disable swap
+  systemd_service:
+     name: dphys-swapfile.service
+     enabled: no
+     state: stopped
+
+- name: optimize logs
+  ansible.posix.mount:
+    src: tmpfs
+    path: /var/log
+    fstype: tmpfs
+    opts: "defaults,noatime,nosuid,size=16m"
+    state: present
+
+- name: optimize tmp
+  ansible.posix.mount:
+    src: tmpfs
+    path: /tmp
+    fstype: tmpfs
+    opts: "defaults,noatime"
+    state: present
+
+- name: Ensure /etc/fstab contains commit option for root filesystem
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^(.*\s+/\s+ext4\s+defaults,noatime)(.*)$'
+    line: '\1,commit=600\2'
+    backrefs: yes
+    backup: yes
+    state: present
+
+- name: Remove duplicate commit options from /etc/fstab
+  shell: sed -i -E 's/(commit=[0-9]+)(,commit=[0-9]+)+/\1/g' /etc/fstab
+
+- name: rpi-update
+  shell: yes | rpi-update
+
+- name: reboot
+  reboot:

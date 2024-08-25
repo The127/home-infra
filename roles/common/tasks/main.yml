@@ -1,0 +1,12 @@
+---
+
+- name: apt upgrade
+  apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: disable swap
+  systemd_service:
+     name: dphys-swapfile.service
+     enabled: no
+     state: stopped
