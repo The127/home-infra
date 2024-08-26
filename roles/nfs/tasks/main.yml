@@ -1,0 +1,31 @@
+---
+- name: Install NFS server package
+  apt:
+    name: "nfs-kernel-server"
+    state: present
+
+- name: Create NFS export directory
+  file:
+    path: "/data/nfs"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0777'
+
+- name: Configure NFS exports
+  copy:
+    content: |
+      /data/nfs *(rw,sync,no_subtree_check)
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Export NFS shares
+  command: exportfs -a
+
+- name: Ensure NFS server is running
+  service:
+    name: nfs-kernel-server
+    state: started
+    enabled: yes

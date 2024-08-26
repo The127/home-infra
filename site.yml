@@ -1,8 +1,11 @@
----
-
-- hosts: "all"
+- name: system config
+  hosts: all
   gather_facts: true
-
   roles:
-  - system-config
-  - updates
+    - system-config
+    - updates
+
+- name: Set up NFS server
+  hosts: k3s-masters
+  roles:
+    - nfs

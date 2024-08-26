@@ -1,6 +1,7 @@
 ---
 # run with `-e 'remote_user=pi' --ask-pass` when deploying to a fresh node that does not have ssh keys set up yet
 - hosts: "all"
+  remote_user: pi
   gather_facts: false
   vars:
     ssh_keys: |

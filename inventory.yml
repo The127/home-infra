@@ -11,16 +11,13 @@ ungrouped:
     k3s-node1:
     k3s-node2:
 
-db:
+k3s-masters:
   hosts:
     k3s-master:
 
-master:
+k3s-nodes:
   hosts:
     k3s-master:
-
-node:
-  hosts:
     k3s-node1:
     k3s-node2:
 
