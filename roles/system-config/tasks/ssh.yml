@@ -1,0 +1,19 @@
+---
+
+- name: "disable password login"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
+    validate: sshd -t -f %s
+  notify: "reload ssh"
+
+- name: "disable keyboard interactive login"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?KbdInteractiveAuthentication'
+    line: 'KbdInteractiveAuthentication no'
+    state: present
+    validate: sshd -t -f %s
+  notify: "reload ssh"

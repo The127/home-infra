@@ -1,0 +1,8 @@
+---
+
+---
+
+- include_tasks: mounts.yml
+- include_tasks: ssh.yml
+- include_tasks: bashrc.yml
+- meta: flush_handlers

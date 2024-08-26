@@ -4,4 +4,5 @@
   gather_facts: true
 
   roles:
-  - common
+  - system-config
+  - updates

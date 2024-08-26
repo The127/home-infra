@@ -1,0 +1,24 @@
+---
+# run with `-e 'remote_user=pi' --ask-pass` when deploying to a fresh node that does not have ssh keys set up yet
+- hosts: "all"
+  gather_facts: false
+  vars:
+    ssh_keys: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWIsnU6fnvMMGAskPtLoP219qnwF6LyMf2c+vQcvRa/ gwendinbean
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGMLi2wXLMMNRKZwknvtHOSjqDDUL1whqymo+wpDmZh8 froggy
+
+  tasks:
+    - name: "authorized_keys for pi user"
+      ansible.posix.authorized_key:
+        user: pi
+        state: present
+        exclusive: true
+        key: "{{ ssh_keys }}"
+    - name: "authorized_keys for root user"
+      become: yes
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        exclusive: true
+        key: "{{ ssh_keys }}"
+

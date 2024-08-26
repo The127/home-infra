@@ -1,0 +1,21 @@
+---
+
+- name: "bashrc for pi user"
+  template:
+    dest: /home/pi/.bashrc
+    src: "../templates/bashrc.j2"
+    owner: pi
+    group: pi
+    mode: '0644'
+  vars:
+    prompt_color: "32"
+
+- name: "bashrc for root user"
+  template:
+    dest: /root/.bashrc
+    src: "../templates/bashrc.j2"
+    owner: root
+    group: root
+    mode: '0644'
+  vars:
+    prompt_color: "31"

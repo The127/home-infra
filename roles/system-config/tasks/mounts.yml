@@ -5,6 +5,7 @@
      name: dphys-swapfile.service
      enabled: no
      state: stopped
+  notify: reboot
 
 - name: optimize logs
   ansible.posix.mount:
@@ -13,6 +14,7 @@
     fstype: tmpfs
     opts: "defaults,noatime,nosuid,size=16m"
     state: present
+  notify: reboot
 
 - name: optimize tmp
   ansible.posix.mount:
@@ -21,6 +23,7 @@
     fstype: tmpfs
     opts: "defaults,noatime"
     state: present
+  notify: reboot
 
 - name: "root filesystem mount"
   ansible.posix.mount:
@@ -29,6 +32,7 @@
     fstype: ext4
     opts: "rw,noatime,commit=600"
     state: present
+  notify: reboot
 
 - name: "boot filesystem mount"
   ansible.posix.mount:
@@ -37,9 +41,4 @@
     fstype: vfat
     opts: "rw,noatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,errors=remount-ro"
     state: present
-
-- name: rpi-update
-  shell: yes | rpi-update
-
-#- name: reboot
-#  reboot:
+  notify: reboot
