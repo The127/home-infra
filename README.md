@@ -123,3 +123,18 @@ Verify it works:
 
 - show the current transmission state: `cat /proc/drbd`
 - show the status of r0: `drbdadm status r0`
+
+
+# k3s installation
+
+on master:
+```shell
+mkdir /data/k3s
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--data-dir /data/k3s" sh -
+cat /data/k3s/server/node-token # this prints the token for adding a node
+```
+
+on worker node:
+```shell
+curl -sfL https://get.k3s.io | K3S_URL=https://k3s-master:6443 K3S_TOKEN=<TOKEN> sh -
+```
