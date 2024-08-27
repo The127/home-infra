@@ -1,4 +1,8 @@
 ---
+- name: install dependencies
+  apt:
+    name: "fzf"
+    state: present
 
 - name: "bashrc for pi user"
   template:
